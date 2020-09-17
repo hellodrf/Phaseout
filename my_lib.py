@@ -1,10 +1,9 @@
-###############################################################################
 def colour(card):
     if card[1]=='S' or card[1]=='C':
         return 'B'
     else:
         return 'R'
-###############################################################################  
+
 def valuefunc(card, r=False):
     if r:
         dict_card={25: 'A', 10: '0', 11: 'J', 12: 'Q', 13: 'K'}
@@ -17,7 +16,7 @@ def valuefunc(card, r=False):
         return int(card[0])
     else:
         return dict_card[card[0]]
-###############################################################################
+
 def phasedout_group_type(group):
     #INNI
     card_count=len(group)
@@ -53,7 +52,7 @@ def phasedout_group_type(group):
                     return None
                 count+=1
             return 5
-###############################################################################
+
 def phasedout_phase_type(hand):
     output=list(map(phasedout_group_type, hand))
     if output==[1, 1]:
@@ -66,15 +65,15 @@ def phasedout_phase_type(hand):
         return 4
     if output==[5, 3]:
         return 5
-###############################################################################
-#unpack(): Simple unpacker for 2D lists.
+
+#unpack(): unpacker for 2D lists.
 def unpack(lst):
     output=[]
     for char in lst:
         for char_ in char:
             output.append(char_)
     return output
-###############################################################################
+
 def type_test(group, c_type):
     card_count=len(group)
     group_no_wild=[card for card in group if card[0]!='A']
@@ -105,11 +104,11 @@ def type_test(group, c_type):
                 return None
             count+=1
         return [card for card in group_no_wild if colour(card)==colour(first_card)]==group_no_wild
-###############################################################################
+
 def clear(data):
     for item in data:
         print(item)
-###############################################################################       
+      
 def phasedout_is_valid_play(play, player_id, table, turn_history, phase_status,
                             hand, discard):
     #INNI
@@ -186,16 +185,16 @@ def phasedout_is_valid_play(play, player_id, table, turn_history, phase_status,
         if turn_history[-1][0]==player_id and 5 in unpack(turn_history[-1][1]):
             return 'Error Code: 10'
         return play[1] in hand
-###############################################################################   
+  
 def phasedout_score(hand):
     return sum(map(valuefunc, hand))
-###############################################################################
+
 def read(desire_dict):
-    print('#############Desire_Dict_Reader#############')
+    print('Desire_Dict_Reader')
     for item in (33, 5, 4.5, 4, 3, 2, 1, 0):
         print(item, ':', [card for card in desire_dict if desire_dict[card]==item])
-    print('###################End####################')
-###############################################################################
+    print('End')
+
 desire_sort_suit=lambda item:sum([desire_dict[item+suit] for suit in 'SCHD'])
 desire_sort_value=lambda item:sum([desire_dict[item+suit] for value in 
                               '234567890JQK'])
