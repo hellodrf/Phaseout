@@ -2,16 +2,14 @@ from my_lib import phasedout_score, phasedout_is_valid_play
 from my_lib import colour, unpack, clear, read, valuefunc
 from collections import Counter
 import time
-###############################################################################
+
 def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
-    ###INIT###
     class obj:
         def __init__(self, validation=0):
             self.vd=validation
     draw, recover, phase, sets, discards=obj(), obj(), obj(), obj(), obj()
-    ###End_of_Section###
+
     
-    ###Extract_Info###
     highest_phase=[[player for player in range(0,4) if phase_status[player]==
                     max(phase_status)], max(phase_status)]
     current_move=[play[0] for play in turn_history[-1][1] if turn_history
@@ -31,9 +29,7 @@ def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
         first_card=hand_no_wild[0]
     except IndexError:
         first_card='WILD'
-    ###End_of_Section###
     
-     ###Move_Validation###
     if current_move==[]:
         draw.vd+=1
     if draw.vd and discard:
@@ -44,10 +40,9 @@ def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
     if not draw.vd and 3 in previous_move:
         sets.vd+=1
     if not draw.vd:
-        discards.vd+=1
-    ###End_of_Section###    
+        discards.vd+=1  
     
-    ##Desire_Core###
+    # Desire_Core
     desire_dict={}
     for value in 'A234567890JQK':
         for suit in 'SCHD':
@@ -162,9 +157,8 @@ def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
                 for value in range_value:
                     for suit in 'SCHD':
                         desire_dict[valuefunc(value, r=True)+suit]=count
-    ###End_of_Section###
  
-    ###Desire_Dict_Controls###
+    # Desire_Dict_Controls
     desire_dict['6S']=0
     read(desire_dict)
     desire_sort_suit=lambda item:sum([desire_dict[item+suit] for suit in 
@@ -172,9 +166,8 @@ def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
     desire_sort_value=lambda item:sum([desire_dict[value+item] for value in 
                               '234567890JQK'])
     desire_sort=lambda item:desire_dict[item]
-    ###End_of_Section###
 
-    ###Move_Core###
+    # Move_Core
     if draw.vd:
         if discard:
             if desire_dict[discard]>4:
@@ -302,17 +295,11 @@ def phasedout_play(player_id, table, turn_history, phase_status, hand, discard):
     if discards.vd:
         discards_card=sorted(hand, key=desire_sort)[0]
         return (5, discards_card)
-    ###End_of_Section###
     
-     
-#EOF   
 
-    
-    
- ##############################################################################
 if __name__ == '__main__':
     start=time.clock()
-    ######
+
     player_id=1
     table=[(None, []), (None, []), (None, []), (None, [])]
     turn_history=[(0, [(2, 'JS'), (5, 'JS')]), (1, [(2, 'JS')])]
@@ -321,7 +308,7 @@ if __name__ == '__main__':
     discard='2S'
     play=phasedout_play(player_id, table, turn_history, phase_status, hand, discard)
     is_valid=phasedout_is_valid_play(play, player_id, table, turn_history, phase_status, hand, discard)
-    ######
+
     end=time.clock()
     print('Result:', play)
     print('Is_Valid?:', is_valid)
